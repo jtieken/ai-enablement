@@ -1,0 +1,1266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Enablement Series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══ BRAND TOKENS ════════════════════════════════════════════ */
+:root {
+  --cloud:        #fcfaf7;
+  --heart:        #421d24;
+  --mysteria:     #d4c7ff;
+  --bg:           #fcfaf7;
+  --surface:      #f2ece3;
+  --surface2:     #e9e1d6;
+  --border:       #ddd3c4;
+  --border-strong:#b5a798;
+  --text:         #1c0f13;
+  --dim:          #6b5157;
+  --muted:        #9c868b;
+  --myst-deep:    #7a6fa8;
+  --myst-mid:     rgba(212,199,255,0.38);
+  --myst-light:   rgba(212,199,255,0.12);
+  --heart-light:  rgba(66,29,36,0.06);
+  --heart-mid:    rgba(66,29,36,0.13);
+  --heart-border: rgba(66,29,36,0.22);
+  --tc:           #421d24;
+}
+
+/* ═══ RESET & BASE ════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:'STIX Two Text',Georgia,serif;font-size:15.5px;line-height:1.85;color:var(--text)}
+h1,h2,h3,h4{font-family:'Manrope',sans-serif}
+
+/* ═══ PAGE SYSTEM ═════════════════════════════════════════════ */
+.page{position:absolute;inset:0;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.4s ease}
+.page.active{opacity:1;pointer-events:all}
+
+/* ═══ LANDING ═════════════════════════════════════════════════ */
+#landing{background:var(--cloud)}
+.landing-inner{max-width:1360px;margin:0 auto;padding:52px 48px 80px}
+.brand-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:60px;padding-bottom:20px;border-bottom:1px solid var(--border);
+}
+.brand-mark{display:flex;align-items:center;gap:10px}
+.brand-s{
+  width:30px;height:30px;border-radius:6px;background:var(--heart);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cloud);font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;
+  flex-shrink:0;
+}
+.brand-name{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.2px;color:var(--text)}
+.brand-series{font-family:'STIX Two Text',serif;font-size:13px;color:var(--muted);font-style:italic}
+
+.landing-hero{text-align:center;margin-bottom:48px}
+.landing-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:20px;
+}
+.landing-eyebrow::before,.landing-eyebrow::after{content:'';width:24px;height:1px;background:var(--border-strong)}
+.landing-title{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(38px,5vw,72px);font-weight:800;letter-spacing:-2.5px;line-height:1.02;
+  color:var(--text);margin-bottom:18px;
+}
+.landing-sub{
+  font-family:'STIX Two Text',serif;
+  font-size:18px;color:var(--dim);max-width:560px;margin:0 auto 32px;line-height:1.9;
+}
+.act-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.act-pill{
+  padding:5px 14px;border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:600;border:1px solid;letter-spacing:0.3px;
+}
+.act-pill.a1{color:var(--heart);border-color:var(--heart-border);background:var(--heart-light)}
+.act-pill.a2{color:var(--myst-deep);border-color:rgba(122,111,168,0.3);background:var(--myst-light)}
+.act-pill.a3{color:#3d6655;border-color:rgba(61,102,85,0.3);background:rgba(61,102,85,0.06)}
+
+/* ═══ TILE GRID ═══════════════════════════════════════════════ */
+.tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:10px}
+.tile-section-label{
+  grid-column:1/-1;
+  font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--muted);
+  padding:12px 0 4px;border-top:1px solid var(--border);margin-top:8px;
+}
+.tile{
+  background:var(--cloud);border:1px solid var(--border);border-radius:12px;
+  padding:22px;cursor:pointer;transition:all 0.22s ease;position:relative;overflow:hidden;
+}
+.tile::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--tc,var(--heart));opacity:0;transition:opacity 0.22s;
+}
+.tile:hover{border-color:var(--border-strong);box-shadow:0 6px 24px rgba(28,15,19,0.08);transform:translateY(-2px)}
+.tile:hover::before{opacity:1}
+.tile.opener-tile{
+  grid-column:1/-1;display:flex;align-items:center;gap:32px;
+  background:var(--heart);border:none;padding:28px 36px;
+}
+.tile.opener-tile:hover{background:var(--heart);filter:brightness(1.08);box-shadow:0 8px 32px rgba(66,29,36,0.35)}
+.tile.opener-tile::before{display:none}
+.opener-num{
+  font-family:'Manrope',sans-serif;font-size:72px;font-weight:800;
+  color:rgba(252,250,247,0.1);line-height:1;flex-shrink:0;letter-spacing:-4px;
+}
+.opener-content .tile-eyebrow{color:rgba(212,199,255,0.7)}
+.opener-content .tile-title{font-size:22px;font-weight:800;color:var(--cloud);letter-spacing:-0.5px}
+.opener-content .tile-desc{font-family:'STIX Two Text',serif;color:rgba(252,250,247,0.55);margin-top:6px}
+.opener-badge{
+  display:inline-block;margin-top:12px;padding:4px 12px;border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.5px;
+  background:rgba(212,199,255,0.15);color:var(--mysteria);border:1px solid rgba(212,199,255,0.25);
+}
+.tile-eyebrow{font-family:'Manrope',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.tile-num{font-family:'Manrope',sans-serif;font-size:30px;font-weight:800;opacity:0.07;margin-bottom:2px;line-height:1;color:var(--text)}
+.tile-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;line-height:1.3;margin-bottom:6px;color:var(--text)}
+.tile-desc{font-family:'STIX Two Text',serif;font-size:13px;color:var(--dim);line-height:1.7}
+.tile-badge{
+  display:inline-block;margin-top:10px;padding:2px 10px;border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:0.5px;
+}
+.tile-arrow{position:absolute;bottom:16px;right:16px;opacity:0;transition:opacity 0.2s;color:var(--muted);font-size:14px}
+.tile:hover .tile-arrow{opacity:1}
+.tile-wrap,.tile-asks{background:var(--surface)}
+
+/* ═══ TOPBAR ══════════════════════════════════════════════════ */
+.theme-topbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 48px;background:rgba(252,250,247,0.95);
+  border-bottom:1px solid var(--border);backdrop-filter:blur(12px);
+}
+.back-btn{
+  display:flex;align-items:center;gap:6px;background:none;
+  border:1px solid var(--border);border-radius:7px;color:var(--dim);
+  font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;
+  padding:6px 13px;cursor:pointer;transition:all 0.18s;
+}
+.back-btn:hover{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+.sh-logo-bar{display:flex;align-items:center;gap:7px}
+.sh-logo-s{
+  width:22px;height:22px;border-radius:4px;background:var(--heart);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cloud);font-family:'Manrope',sans-serif;font-weight:800;font-size:11px;
+}
+.sh-logo-text{font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:600;color:var(--dim)}
+.progress-indicator{display:flex;gap:4px;align-items:center}
+.prog-dot{width:5px;height:5px;border-radius:50%;background:var(--border-strong);transition:all 0.22s;cursor:pointer}
+.prog-dot.active{background:var(--tc,var(--heart));width:20px;border-radius:3px}
+.prog-dot:hover{background:var(--muted)}
+.nav-btns{display:flex;gap:5px}
+.nav-btn{
+  background:var(--surface);border:1px solid var(--border);border-radius:7px;
+  color:var(--dim);font-size:13px;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.18s;
+}
+.nav-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--border-strong)}
+
+/* ═══ THEME PAGE ══════════════════════════════════════════════ */
+.theme-page{min-height:100vh;display:flex;flex-direction:column;background:var(--cloud)}
+.theme-hero{
+  padding:44px 48px 36px;max-width:1200px;margin:0 auto;width:100%;
+  display:flex;align-items:flex-start;gap:44px;
+}
+.theme-hero-left{flex:1}
+.theme-act-badge{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;
+  font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;border:1px solid;margin-bottom:16px;
+}
+.theme-number-bg{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(64px,10vw,120px);font-weight:800;line-height:0.95;
+  letter-spacing:-4px;color:transparent;
+  -webkit-text-stroke:1.5px rgba(28,15,19,0.06);
+  margin-bottom:-12px;user-select:none;
+}
+.theme-title{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(24px,3.5vw,44px);font-weight:800;letter-spacing:-0.8px;
+  line-height:1.1;margin-bottom:20px;color:var(--text);
+}
+.theme-claim{
+  font-family:'STIX Two Text',serif;
+  background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--tc,var(--heart));
+  border-radius:0 10px 10px 0;padding:18px 22px;
+  font-size:15px;line-height:1.9;color:var(--dim);font-style:italic;max-width:560px;
+}
+.theme-visual{
+  width:260px;flex-shrink:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:28px;
+  display:flex;align-items:center;justify-content:center;min-height:220px;
+}
+.theme-visual.dark{background:var(--heart);border-color:transparent}
+.theme-visual svg{width:100%;height:auto;max-height:190px}
+
+/* ═══ THEME BODY ══════════════════════════════════════════════ */
+.theme-body{
+  max-width:1200px;margin:0 auto;width:100%;
+  padding:0 48px 80px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;
+}
+.stat-card{
+  background:var(--cloud);border:1px solid var(--border);border-radius:12px;
+  padding:22px 18px;text-align:center;
+  opacity:0;transform:translateY(12px);transition:opacity 0.5s ease,transform 0.5s ease;
+}
+.stat-card.visible{opacity:1;transform:none}
+.stat-num{
+  font-family:'Manrope',sans-serif;
+  font-size:clamp(32px,4.5vw,52px);font-weight:800;line-height:1;
+  margin-bottom:8px;color:var(--tc,var(--heart));letter-spacing:-2px;
+}
+.stat-label{font-family:'STIX Two Text',serif;font-size:13px;color:var(--dim);line-height:1.75}
+.quote-card{
+  grid-column:span 2;
+  background:var(--cloud);border:1px solid var(--border);
+  border-radius:12px;padding:26px;position:relative;overflow:hidden;
+}
+.quote-mark{
+  position:absolute;top:-12px;left:18px;
+  font-size:110px;font-weight:400;color:var(--tc,var(--heart));opacity:0.05;
+  font-family:Georgia,serif;line-height:1;user-select:none;
+}
+.quote-text{
+  font-family:'STIX Two Text',serif;
+  font-size:16.5px;line-height:1.85;margin-bottom:14px;
+  position:relative;color:var(--text);font-style:italic;
+}
+.quote-author{
+  font-family:'Manrope',sans-serif;
+  font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
+}
+.reframe-card{
+  grid-column:1/-1;
+  background:var(--surface);border:1px solid var(--border);
+  padding:22px 26px;display:flex;align-items:flex-start;gap:14px;
+  border-left:3px solid var(--tc,var(--heart));border-radius:0 12px 12px 0;
+}
+.reframe-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.reframe-text{font-family:'STIX Two Text',serif;font-size:15px;line-height:1.85;color:var(--text)}
+.reframe-text strong{
+  font-family:'Manrope',sans-serif;font-weight:700;font-size:12.5px;
+  text-transform:uppercase;letter-spacing:0.5px;color:var(--tc,var(--heart));
+}
+.hooks-row{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hooks-row-3{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hook-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.hook-label{
+  font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+}
+.hook-text{font-family:'STIX Two Text',serif;font-size:13px;color:var(--dim);line-height:1.8;font-style:italic}
+.subtopic-card{
+  background:var(--cloud);border:1px solid var(--border);border-radius:10px;padding:16px 18px;
+  border-top:2px solid var(--tc,var(--heart));
+}
+.subtopic-label{
+  font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--tc,var(--heart));margin-bottom:6px;opacity:0.85;
+}
+.subtopic-title{font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.subtopic-text{font-family:'STIX Two Text',serif;font-size:13px;color:var(--dim);line-height:1.75}
+
+/* ═══ WRAP-UP ══════════════════════════════════════════════════ */
+.wrapup-inner{max-width:1060px;margin:0 auto;padding:52px 48px 80px}
+.wrapup-header{text-align:center;margin-bottom:48px}
+.page-eyebrow{font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.page-title{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px;color:var(--text)}
+.page-sub{font-family:'STIX Two Text',serif;font-size:16px;color:var(--dim);max-width:480px;margin:0 auto;line-height:1.9;font-style:italic}
+.act-section{margin-bottom:32px}
+.act-section-title{
+  font-family:'Manrope',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;padding:0 0 10px;border-bottom:1px solid var(--border);margin-bottom:14px;color:var(--muted);
+}
+.theme-row{
+  display:flex;align-items:flex-start;gap:14px;padding:13px 16px;border-radius:9px;
+  margin-bottom:6px;border:1px solid var(--border);background:var(--cloud);
+  cursor:pointer;transition:all 0.18s;
+}
+.theme-row:hover{background:var(--surface);border-color:var(--border-strong);box-shadow:0 2px 8px rgba(28,15,19,0.06)}
+.theme-row-num{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;opacity:0.12;width:36px;flex-shrink:0;line-height:1.2;color:var(--text)}
+.theme-row-content{flex:1}
+.theme-row-title{font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.theme-row-desc{font-family:'STIX Two Text',serif;font-size:12.5px;color:var(--dim);line-height:1.65;font-style:italic}
+.wrapup-close{
+  margin-top:40px;background:var(--heart);border-radius:14px;padding:36px;text-align:center;
+}
+.wrapup-close p{font-family:'STIX Two Text',serif;font-size:16.5px;line-height:1.9;color:rgba(252,250,247,0.72);max-width:620px;margin:0 auto;font-style:italic}
+.wrapup-close strong{color:var(--cloud);font-family:'Manrope',sans-serif;font-style:normal;font-size:15px}
+
+/* ═══ DIRECT ASKS ══════════════════════════════════════════════ */
+.asks-inner{max-width:1060px;margin:0 auto;padding:52px 48px 80px}
+.asks-header{text-align:center;margin-bottom:48px}
+.asks-context{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px;
+  font-family:'STIX Two Text',serif;font-size:15px;line-height:1.9;
+  color:var(--dim);text-align:center;max-width:700px;margin:0 auto 32px;font-style:italic;
+}
+.asks-context strong{color:var(--text);font-family:'Manrope',sans-serif;font-style:normal;font-weight:700}
+.asks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.ask-card{
+  background:var(--cloud);border:1px solid var(--border);border-radius:12px;padding:22px;
+  border-top:2px solid var(--heart);transition:all 0.18s;
+}
+.ask-card:hover{box-shadow:0 4px 18px rgba(28,15,19,0.08);border-color:var(--border-strong);transform:translateY(-1px)}
+.ask-number{font-family:'Manrope',sans-serif;font-size:32px;font-weight:800;color:var(--heart);opacity:0.18;line-height:1;margin-bottom:7px;letter-spacing:-1.5px}
+.ask-title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;margin-bottom:7px;color:var(--text)}
+.ask-body{font-family:'STIX Two Text',serif;font-size:13px;color:var(--dim);line-height:1.75}
+.ask-theme-ref{
+  display:inline-block;margin-top:10px;
+  font-family:'Manrope',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--heart);opacity:0.5;
+}
+.asks-cta{background:var(--heart);border-radius:14px;padding:40px;text-align:center}
+.asks-cta h3{font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;color:var(--cloud)}
+.asks-cta p{font-family:'STIX Two Text',serif;font-size:15px;color:rgba(252,250,247,0.7);line-height:1.9;max-width:560px;margin:0 auto;font-style:italic}
+.asks-cta strong{color:var(--mysteria);font-style:normal;font-family:'Manrope',sans-serif}
+
+/* ═══ ANIMATIONS — shared ════════════════════════════════════ */
+@keyframes fade-in   {from{opacity:0}to{opacity:1}}
+@keyframes pulse-op  {0%,100%{opacity:0.2}50%{opacity:0.8}}
+@keyframes pulse-sm  {0%,100%{opacity:0.12}50%{opacity:0.5}}
+@keyframes float-y   {0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes spin-cw   {to{transform:rotate(360deg)}}
+@keyframes spin-ccw  {to{transform:rotate(-360deg)}}
+@keyframes breathe   {0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes draw-line {from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+@keyframes pop-in    {from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes msg-rise  {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes wave-in   {from{stroke-dashoffset:400;opacity:0}to{stroke-dashoffset:0;opacity:1}}
+@keyframes blink     {0%,100%{opacity:1}50%{opacity:0}}
+
+/* T1 — Expanding horizon rings */
+.t1-dot{animation:pulse-op 2.2s ease-in-out infinite}
+.t1-r1{animation:spin-cw  22s linear infinite;transform-origin:100px 100px}
+.t1-r2{animation:spin-ccw 34s linear infinite;transform-origin:100px 100px}
+.t1-r3{animation:breathe  5s ease-in-out infinite}
+.t1-s1{animation:pulse-op 2s 0.0s ease-in-out infinite}
+.t1-s2{animation:pulse-op 2s 0.5s ease-in-out infinite}
+.t1-s3{animation:pulse-op 2s 1.0s ease-in-out infinite}
+.t1-s4{animation:pulse-op 2s 1.5s ease-in-out infinite}
+
+/* T2 — EQ/IQ chart */
+.t2-eq{animation:breathe 3s ease-in-out infinite}
+.t2-iq{animation:pulse-sm 3s ease-in-out infinite}
+.t2-heart{animation:float-y 3.5s ease-in-out infinite}
+.t2-beat{stroke-dasharray:5 3;animation:pulse-op 2s ease-in-out infinite}
+
+/* T3 — Team network */
+.t3-center{animation:breathe 3s ease-in-out infinite}
+.t3-l1{stroke-dasharray:70;stroke-dashoffset:70;animation:draw-line 0.6s 0.3s ease-out forwards}
+.t3-l2{stroke-dasharray:70;stroke-dashoffset:70;animation:draw-line 0.6s 0.7s ease-out forwards}
+.t3-l3{stroke-dasharray:70;stroke-dashoffset:70;animation:draw-line 0.6s 1.1s ease-out forwards}
+.t3-n1{animation:pop-in 0.4s 0.8s ease-out both}
+.t3-n2{animation:pop-in 0.4s 1.2s ease-out both}
+.t3-n3{animation:pop-in 0.4s 1.6s ease-out both}
+.t3-pulse{animation:pulse-op 2.5s ease-in-out infinite}
+
+/* T4 — Blueprint */
+.t4-grid{animation:fade-in 1.4s ease-out both}
+.t4-l1{stroke-dasharray:300;stroke-dashoffset:300;animation:draw-line 1s 0.2s ease-out forwards}
+.t4-l2{stroke-dasharray:300;stroke-dashoffset:300;animation:draw-line 1s 0.8s ease-out forwards}
+.t4-l3{stroke-dasharray:300;stroke-dashoffset:300;animation:draw-line 1s 1.3s ease-out forwards}
+.t4-l4{stroke-dasharray:300;stroke-dashoffset:300;animation:draw-line 1s 1.7s ease-out forwards}
+.t4-detail{animation:fade-in 0.8s 2.2s ease-out both}
+
+/* T5 — Venn */
+.t5-ca{animation:breathe 4s 0s   ease-in-out infinite}
+.t5-cb{animation:breathe 4s 0.8s ease-in-out infinite}
+.t5-cx{animation:pulse-op 2.5s ease-in-out infinite}
+.t5-label{animation:fade-in 1s 0.5s ease-out both}
+
+/* T6 — Message thread */
+.t6-m1{animation:msg-rise 0.5s 0.1s ease-out both}
+.t6-m2{animation:msg-rise 0.5s 0.6s ease-out both}
+.t6-m3{animation:msg-rise 0.5s 1.1s ease-out both}
+.t6-m4{animation:msg-rise 0.5s 1.6s ease-out both}
+.t6-cur{animation:blink 1s 2.0s step-end infinite}
+
+/* T7 — Document fill */
+.t7-outline{animation:fade-in 0.6s ease-out both}
+.t7-l1{animation:fade-in 0.4s 0.4s ease-out both}
+.t7-l2{animation:fade-in 0.4s 0.7s ease-out both}
+.t7-l3{animation:fade-in 0.4s 1.0s ease-out both}
+.t7-l4{animation:fade-in 0.4s 1.3s ease-out both}
+.t7-l5{animation:fade-in 0.4s 1.6s ease-out both}
+.t7-l6{animation:fade-in 0.4s 1.9s ease-out both}
+.t7-t1{animation:pop-in 0.4s 2.1s ease-out both}
+.t7-t2{animation:pop-in 0.4s 2.3s ease-out both}
+.t7-t3{animation:pop-in 0.4s 2.5s ease-out both}
+
+/* T8 — Static to flow */
+.t8-doc{animation:pulse-sm 3s ease-in-out infinite}
+.t8-w1{stroke-dasharray:400;animation:wave-in 1.4s 0.3s ease-out both}
+.t8-w2{stroke-dasharray:400;animation:wave-in 1.4s 0.8s ease-out both}
+.t8-w3{stroke-dasharray:400;animation:wave-in 1.4s 1.2s ease-out both}
+
+/* T9 — Orbital play */
+@keyframes orbit-a{from{transform:rotate(0deg) translateX(52px) rotate(0deg)}to{transform:rotate(360deg) translateX(52px) rotate(-360deg)}}
+@keyframes orbit-b{from{transform:rotate(120deg) translateX(36px) rotate(-120deg)}to{transform:rotate(480deg) translateX(36px) rotate(-480deg)}}
+@keyframes orbit-c{from{transform:rotate(240deg) translateX(44px) rotate(-240deg)}to{transform:rotate(600deg) translateX(44px) rotate(-600deg)}}
+.t9-core{animation:pulse-op 3s ease-in-out infinite}
+.t9-oa{animation:orbit-a 9s linear infinite;transform-origin:100px 95px}
+.t9-ob{animation:orbit-b 6s linear infinite;transform-origin:100px 95px}
+.t9-oc{animation:orbit-c 12s linear infinite;transform-origin:100px 95px}
+
+/* ═══ RESPONSIVE ══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .theme-hero{flex-direction:column;padding:28px 24px 24px;gap:24px}
+  .theme-visual{width:100%;max-width:280px}
+  .theme-body{grid-template-columns:1fr 1fr;padding:0 24px 60px}
+  .quote-card{grid-column:1/-1}
+  .landing-inner{padding:28px 24px 60px}
+  .tile-grid{grid-template-columns:1fr 1fr}
+  .tile.opener-tile{flex-direction:column;gap:10px;padding:22px}
+  .opener-num{font-size:52px}
+  .hooks-row,.hooks-row-3{grid-template-columns:1fr}
+  .theme-topbar{padding:10px 24px}
+  .wrapup-inner,.asks-inner{padding:28px 24px 60px}
+  .asks-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .tile-grid{grid-template-columns:1fr}
+  .theme-body{grid-template-columns:1fr}
+  .quote-card,.stat-card{grid-column:auto}
+  .reframe-card{flex-direction:column}
+}
+.chevron-right::after{content:'→'}
+.chevron-left::after{content:'←'}
+
+/* ═══ SUBTOPICS SECTIONS (Theme 07 expanded) ══════════════ */
+.subtopics-section{
+  grid-column:1/-1;
+  background:var(--cloud);border:1px solid var(--border);border-radius:12px;
+  padding:26px 28px;margin-top:4px;
+}
+.subtopics-header{
+  font-family:'Manrope',sans-serif;font-size:13.5px;font-weight:700;
+  letter-spacing:-0.2px;color:var(--text);margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);
+}
+.subtopics-body{
+  font-family:'STIX Two Text',serif;font-size:14.5px;line-height:1.85;color:var(--dim);
+}
+.subtopics-body p{margin:0}
+.subtopics-body ul{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LANDING
+════════════════════════════════════════════════════════════ -->
+<div id="landing" class="page active">
+<div class="landing-inner">
+
+  <div class="brand-bar">
+    <div class="brand-mark">
+      <div><div class="brand-name">AI Enablement Series</div></div>
+    </div>
+    <div class="brand-series">Jonathan Tieken</div>
+  </div>
+
+  <div class="landing-hero">
+    <div class="landing-eyebrow">AI Enablement Series</div>
+    <h1 class="landing-title">The AI Enablement Series</h1>
+    <p class="landing-sub">A framework for how to think about, engage with, and thrive in an AI-accelerated world. Ten themes. Three acts. One direction.</p>
+    <div class="act-pills">
+      <span class="act-pill a1">Act I — Identity Reset</span>
+      <span class="act-pill a2">Act II — Operating Principles</span>
+      <span class="act-pill a3">Act III — The Forward View</span>
+    </div>
+  </div>
+
+  <div class="tile-grid">
+
+    <div class="tile opener-tile" style="--tc:#421d24" onclick="navigate(1)">
+      <div class="opener-num">01</div>
+      <div class="opener-content">
+        <div class="tile-eyebrow">Series Opener</div>
+        <div class="tile-title">Proficiency is Relatively Impossible</div>
+        <div class="tile-desc">Stop waiting to feel ready. The landscape moves faster than expertise can form. Here's what actually matters.</div>
+        <span class="opener-badge">Start Here →</span>
+      </div>
+    </div>
+
+    <div class="tile-section-label" style="color:var(--heart)">▸ Act I — Identity Reset</div>
+    <div class="tile" style="--tc:#6b5f8a" onclick="navigate(2)">
+      <div class="tile-num">02</div><div class="tile-title">EQ Over IQ</div>
+      <div class="tile-desc">The skills that once felt soft are now the hardest differentiators.</div>
+      <span class="tile-badge" style="background:var(--myst-light);color:var(--myst-deep)">Act I</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+    <div class="tile" style="--tc:#7a4f32" onclick="navigate(3)">
+      <div class="tile-num">03</div><div class="tile-title">Becoming a Team Lead</div>
+      <div class="tile-desc">Your next direct report won't have a salary. Managing agents is the new management skill.</div>
+      <span class="tile-badge" style="background:rgba(122,79,50,0.08);color:#7a4f32">Act I</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+    <div class="tile" style="--tc:#3d6655" onclick="navigate(4)">
+      <div class="tile-num">04</div><div class="tile-title">Architects, Not Engineers</div>
+      <div class="tile-desc">You don't need to build things. You need to know what to build.</div>
+      <span class="tile-badge" style="background:rgba(61,102,85,0.08);color:#3d6655">Act I</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+
+    <div class="tile-section-label" style="color:var(--myst-deep)">▸ Act II — Operating Principles</div>
+    <div class="tile" style="--tc:#5a6b84" onclick="navigate(5)">
+      <div class="tile-num">05</div><div class="tile-title">The Third Mind</div>
+      <div class="tile-desc">Human + AI produces something neither could reach independently. Human review is how you get there.</div>
+      <span class="tile-badge" style="background:rgba(90,107,132,0.08);color:#5a6b84">Act II</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+    <div class="tile" style="--tc:#6b3f55" onclick="navigate(6)">
+      <div class="tile-num">06</div><div class="tile-title">It's Not About How You Prompt</div>
+      <div class="tile-desc">Your overall interactions with AI matter more than any individual prompt. Manage agents like a team.</div>
+      <span class="tile-badge" style="background:rgba(107,63,85,0.08);color:#6b3f55">Act II</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+    <div class="tile" style="--tc:#7a5c35" onclick="navigate(7)">
+      <div class="tile-num">07</div><div class="tile-title">Context Is King</div>
+      <div class="tile-desc">The more your AI understands about your world, the better it can help you in it. Platform connections are context layers.</div>
+      <span class="tile-badge" style="background:rgba(122,92,53,0.08);color:#7a5c35">Act II</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+
+    <div class="tile-section-label" style="color:#3d6655">▸ Act III — The Forward View</div>
+    <div class="tile" style="--tc:#3a5c42" onclick="navigate(8)">
+      <div class="tile-num">08</div><div class="tile-title">Beyond Docs and Decks</div>
+      <div class="tile-desc">The slide deck is becoming an output. The data layer is becoming the input.</div>
+      <span class="tile-badge" style="background:rgba(58,92,66,0.08);color:#3a5c42">Act III</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+    <div class="tile" style="--tc:#7a4f62" onclick="navigate(9)">
+      <div class="tile-num">09</div><div class="tile-title">Productive Play is Paramount</div>
+      <div class="tile-desc">Permission to play is not a perk. It is a competitive advantage.</div>
+      <span class="tile-badge" style="background:rgba(122,79,98,0.08);color:#7a4f62">Series Closer</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+
+    <div class="tile-section-label">▸ Closing</div>
+    <div class="tile tile-wrap" style="--tc:#421d24" onclick="navigate(10)">
+      <div class="tile-num" style="opacity:0.1">↩</div>
+      <div class="tile-title">Series Wrap-Up</div>
+      <div class="tile-desc">The 9 things we covered and the arc that connects them.</div>
+      <span class="tile-badge" style="background:var(--heart-light);color:var(--heart)">Recap</span>
+      <span class="tile-arrow chevron-right"></span>
+    </div>
+
+
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1
+════════════════════════════════════════════════════════════ -->
+<div id="page-1" class="page theme-page" style="--tc:#421d24">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-1"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(0)" title="Home">⌂</button><button class="nav-btn" onclick="navigate(2)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#421d24;border-color:var(--heart-border);background:var(--heart-light)">Series Opener</div>
+      <div class="theme-number-bg">01</div>
+      <h1 class="theme-title">Proficiency is Relatively Impossible</h1>
+      <div class="theme-claim">"The idea of 'knowing AI' is not a destination you can reach. The right posture isn't expertise — it's proactive curiosity combined with a willingness to stay in motion."</div>
+    </div>
+    <div class="theme-visual dark">
+      <!-- T1: Expanding horizon rings — dark panel, mysteria colors -->
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="6" fill="#d4c7ff" class="t1-dot"/>
+        <g class="t1-r1">
+          <circle cx="100" cy="100" r="26" stroke="#d4c7ff" stroke-width="0.8" stroke-dasharray="5 5" fill="none" opacity="0.55"/>
+        </g>
+        <g class="t1-r2">
+          <circle cx="100" cy="100" r="50" stroke="#d4c7ff" stroke-width="0.6" stroke-dasharray="4 7" fill="none" opacity="0.3"/>
+        </g>
+        <circle cx="100" cy="100" r="72" stroke="#d4c7ff" stroke-width="0.4" stroke-dasharray="3 9" fill="none" opacity="0.18" class="t1-r3"/>
+        <circle cx="100" cy="100" r="90" stroke="#d4c7ff" stroke-width="0.3" stroke-dasharray="2 11" fill="none" opacity="0.1" class="t1-r3"/>
+        <circle cx="100" cy="50" r="2.5" fill="#d4c7ff" class="t1-s1"/>
+        <circle cx="150" cy="100" r="2.5" fill="#d4c7ff" class="t1-s2"/>
+        <circle cx="100" cy="150" r="2.5" fill="#d4c7ff" class="t1-s3"/>
+        <circle cx="50"  cy="100" r="2.5" fill="#d4c7ff" class="t1-s4"/>
+        <text x="100" y="108" text-anchor="middle" fill="#d4c7ff" font-size="14" opacity="0.65" font-family="Georgia,serif">∞</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">300+</div><div class="stat-label">Large language models available — and growing weekly</div></div>
+    <div class="stat-card"><div class="stat-num">90%</div><div class="stat-label">of workers report feeling overwhelmed by the number of software tools they use</div></div>
+    <div class="stat-card"><div class="stat-num">54%</div><div class="stat-label">of employees feel they are falling behind their peers in AI — even while using it daily</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The pace of AI development is unprecedented.</div>
+      <div class="quote-author">Mary Meeker, 2025 AI Report — used the word "unprecedented" 51 times across 340 pages</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🧭</div><div class="reframe-text"><strong>The reframe:</strong> Proficiency is the wrong goal. What you want is <em>direction</em> — a heading toward engagement, experimentation, and comfort with not-knowing. The people winning right now aren't the most technically fluent. They're the most curious and the least afraid of feeling like a beginner.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"54% of employees feel like they're falling behind in AI. Here's what I want to tell all of them: you're not behind. The race you think you're losing doesn't have a finish line."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">Show of hands: "How many of you feel genuinely confident about where AI is going?" Then: "How many feel a little behind?" The second hand goes up more. That's the entry point.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2
+════════════════════════════════════════════════════════════ -->
+<div id="page-2" class="page theme-page" style="--tc:#6b5f8a">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-2"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(1)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(3)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#6b5f8a;border-color:rgba(107,95,138,0.3);background:var(--myst-light)">Act I — Identity Reset</div>
+      <div class="theme-number-bg">02</div>
+      <h1 class="theme-title">EQ Over IQ</h1>
+      <div class="theme-claim">"AI has automated the IQ arms race. What remains — and accelerates in value — is everything AI cannot replicate: empathy, trust, connection, judgment. The skills that once felt soft are now the hardest differentiators."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T2: EQ bar rising, IQ bar fading, floating heart, pulse line -->
+      <svg viewBox="0 0 200 180" fill="none">
+        <rect x="118" y="90" width="44" height="80" rx="4" fill="rgba(155,134,139,0.15)" stroke="rgba(155,134,139,0.35)" stroke-width="1" class="t2-iq"/>
+        <text x="140" y="172" text-anchor="middle" fill="#9c868b" font-size="10" font-weight="700" font-family="Manrope,sans-serif">IQ</text>
+        <text x="140" y="82" text-anchor="middle" fill="#9c868b" font-size="8.5" font-family="Manrope,sans-serif">automated ↓</text>
+        <rect x="38" y="28" width="44" height="142" rx="4" fill="rgba(212,199,255,0.22)" stroke="#d4c7ff" stroke-width="1.5" class="t2-eq"/>
+        <text x="60" y="172" text-anchor="middle" fill="#6b5f8a" font-size="10" font-weight="700" font-family="Manrope,sans-serif">EQ</text>
+        <text x="60" y="20" text-anchor="middle" fill="#6b5f8a" font-size="8.5" font-family="Manrope,sans-serif">rising ↑</text>
+        <path d="M 82 28 Q 100 70 118 90" stroke="rgba(107,95,138,0.2)" stroke-width="0.8" fill="none" stroke-dasharray="3 4"/>
+        <polyline points="25,155 38,155 43,143 50,163 57,148 64,155 82,155" stroke="#d4c7ff" stroke-width="1.5" fill="none" class="t2-beat"/>
+        <text x="140" y="62" text-anchor="middle" fill="#d4c7ff" font-size="28" opacity="0.5" class="t2-heart">♡</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">80%</div><div class="stat-label">of consumers prefer interacting with people over machines when it matters</div></div>
+    <div class="stat-card"><div class="stat-num">85%</div><div class="stat-label">sales growth advantage for companies that score high on emotional connection (Deloitte)</div></div>
+    <div class="stat-card"><div class="stat-num">71%</div><div class="stat-label">of employers now rank EQ among their top desired skills — above technical ability</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">Soft skills like emotional intelligence and communication are vital as AI eliminates roles.</div>
+      <div class="quote-author">Jamie Dimon, CEO of JPMorgan Chase — Fortune, December 2025</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🤝</div><div class="reframe-text"><strong>The reframe:</strong> In a world where your AI handles the analysis, your value is in knowing what questions to ask, who to call, and how to make someone feel heard. People still want to buy from people — and that isn't changing.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"AI just automated your IQ. Here's what it can't touch."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"Think about the best colleague you've ever worked with. What made them great?" The answers almost never lead with technical knowledge. That's the lesson.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 3
+════════════════════════════════════════════════════════════ -->
+<div id="page-3" class="page theme-page" style="--tc:#7a4f32">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-3"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(2)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(4)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#7a4f32;border-color:rgba(122,79,50,0.25);background:rgba(122,79,50,0.06)">Act I — Identity Reset</div>
+      <div class="theme-number-bg">03</div>
+      <h1 class="theme-title">Becoming a Team Lead</h1>
+      <div class="theme-claim">"Nearly everyone in a professional role will be responsible for managing agents — directing their work, checking their output, adjusting their behavior, and knowing when to step in. Managing agents is the new management skill."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T3: Network nodes drawing in with sequential animation -->
+      <svg viewBox="0 0 200 175" fill="none">
+        <circle cx="100" cy="35" r="18" stroke="#7a4f32" stroke-width="1.5" fill="rgba(122,79,50,0.08)" class="t3-center"/>
+        <text x="100" y="41" text-anchor="middle" fill="#7a4f32" font-size="14" font-family="sans-serif">◎</text>
+        <line x1="100" y1="53" x2="44"  y2="108" stroke="#7a4f32" stroke-width="1.2" opacity="0.35" class="t3-l1"/>
+        <line x1="100" y1="53" x2="100" y2="108" stroke="#7a4f32" stroke-width="1.2" opacity="0.35" class="t3-l2"/>
+        <line x1="100" y1="53" x2="156" y2="108" stroke="#7a4f32" stroke-width="1.2" opacity="0.35" class="t3-l3"/>
+        <g class="t3-n1">
+          <rect x="24" y="108" width="40" height="30" rx="7" fill="rgba(212,199,255,0.15)" stroke="#d4c7ff" stroke-width="1.4"/>
+          <text x="44" y="127" text-anchor="middle" fill="#6b5f8a" font-size="11">⬡</text>
+        </g>
+        <g class="t3-n2">
+          <rect x="80" y="108" width="40" height="30" rx="7" fill="rgba(212,199,255,0.15)" stroke="#d4c7ff" stroke-width="1.4"/>
+          <text x="100" y="127" text-anchor="middle" fill="#6b5f8a" font-size="11">⬡</text>
+        </g>
+        <g class="t3-n3">
+          <rect x="136" y="108" width="40" height="30" rx="7" fill="rgba(212,199,255,0.15)" stroke="#d4c7ff" stroke-width="1.4"/>
+          <text x="156" y="127" text-anchor="middle" fill="#6b5f8a" font-size="11">⬡</text>
+        </g>
+        <text x="44"  y="150" text-anchor="middle" fill="#9c868b" font-size="7.5" font-family="Manrope,sans-serif" class="t3-pulse">agent</text>
+        <text x="100" y="150" text-anchor="middle" fill="#9c868b" font-size="7.5" font-family="Manrope,sans-serif" class="t3-pulse">agent</text>
+        <text x="156" y="150" text-anchor="middle" fill="#9c868b" font-size="7.5" font-family="Manrope,sans-serif" class="t3-pulse">agent</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">79%</div><div class="stat-label">of organizations report some level of agentic AI adoption — right now, today</div></div>
+    <div class="stat-card"><div class="stat-num">96%</div><div class="stat-label">are planning to expand their use of AI agents in 2025–2026</div></div>
+    <div class="stat-card"><div class="stat-num">46%</div><div class="stat-label">CAGR for the AI agent market through 2030 — the fastest growing category in enterprise tech</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The biggest barrier isn't the technology. It's mindset, change readiness, and workforce engagement.</div>
+      <div class="quote-author">OneReach.ai Agentic AI Adoption Report, 2026</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🎯</div><div class="reframe-text"><strong>The reframe:</strong> Managing agents is not a technical skill — it's a leadership skill. You don't need to understand how they work. You need to know how to direct, calibrate, and review them. The people who thrive next aren't the ones who understand the model. They're the ones who know how to run the team.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"Your next direct report won't have a salary. But they'll need a manager."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"Raise your hand if you've ever managed someone who worked faster than you could review their output." That's agent management. The question isn't whether you'll do it — it's whether you'll be good at it.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 4
+════════════════════════════════════════════════════════════ -->
+<div id="page-4" class="page theme-page" style="--tc:#3d6655">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-4"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(3)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(5)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#3d6655;border-color:rgba(61,102,85,0.28);background:rgba(61,102,85,0.06)">Act I — Identity Reset</div>
+      <div class="theme-number-bg">04</div>
+      <h1 class="theme-title">Architects, Not Engineers</h1>
+      <div class="theme-claim">"You don't need to understand how to build the thing. You need to understand what to build, why it matters, and whether the output is trustworthy. That's the architect's mindset — and it's the most valuable posture you can take right now."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T4: Blueprint grid with structure drawing in stroke by stroke -->
+      <svg viewBox="0 0 200 200" fill="none">
+        <g class="t4-grid" opacity="0.08">
+          <line x1="25"  y1="0"   x2="25"  y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="55"  y1="0"   x2="55"  y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="85"  y1="0"   x2="85"  y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="115" y1="0"   x2="115" y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="145" y1="0"   x2="145" y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="175" y1="0"   x2="175" y2="200" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="25"  x2="200" y2="25"  stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="55"  x2="200" y2="55"  stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="85"  x2="200" y2="85"  stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="115" x2="200" y2="115" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="145" x2="200" y2="145" stroke="#3d6655" stroke-width="0.7"/>
+          <line x1="0"   y1="175" x2="200" y2="175" stroke="#3d6655" stroke-width="0.7"/>
+        </g>
+        <line x1="32" y1="162" x2="168" y2="162" stroke="#3d6655" stroke-width="2" class="t4-l1"/>
+        <line x1="32" y1="162" x2="32"  y2="75"  stroke="#3d6655" stroke-width="2" class="t4-l2"/>
+        <line x1="168" y1="162" x2="168" y2="75"  stroke="#3d6655" stroke-width="2" class="t4-l2"/>
+        <line x1="32"  y1="75"  x2="100" y2="32"  stroke="#3d6655" stroke-width="2" class="t4-l3"/>
+        <line x1="168" y1="75"  x2="100" y2="32"  stroke="#3d6655" stroke-width="2" class="t4-l3"/>
+        <rect x="82" y="130" width="36" height="32" rx="2" stroke="#d4c7ff" stroke-width="1.2" fill="none" class="t4-l4"/>
+        <g class="t4-detail">
+          <line x1="22" y1="75"  x2="22" y2="162" stroke="#d4c7ff" stroke-width="0.8" opacity="0.6"/>
+          <line x1="18" y1="75"  x2="26" y2="75"  stroke="#d4c7ff" stroke-width="0.8" opacity="0.6"/>
+          <line x1="18" y1="162" x2="26" y2="162" stroke="#d4c7ff" stroke-width="0.8" opacity="0.6"/>
+          <text x="115" y="22" fill="#d4c7ff" font-size="8.5" font-family="Manrope,sans-serif" opacity="0.75">structure</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">44%</div><div class="stat-label">of all work tasks could be augmented or automated by AI within the next 5 years (McKinsey)</div></div>
+    <div class="stat-card"><div class="stat-num">92%</div><div class="stat-label">of executives say they expect to use more AI-generated content — but only 10% trust it without human review</div></div>
+    <div class="stat-card"><div class="stat-num">3×</div><div class="stat-label">more productive: teams that use AI to prototype ideas before building them (MIT, 2024)</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The best engineers I know aren't writing more code with AI. They're writing better specs.</div>
+      <div class="quote-author">Amjad Masad, CEO of Replit — X/Twitter, January 2025</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🏛️</div><div class="reframe-text"><strong>The reframe:</strong> The engineer asks "how do I build this?" The architect asks "what should exist here, and why?" AI is an extraordinary engineer. It is not yet a trustworthy architect. That gap is your career.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"The engineers who fear AI are trying to compete with it. The architects who love AI are directing it."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"What does it mean to add value in a world where AI can do the work?" The answer starts with thinking clearly about what the work is actually for.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 5
+════════════════════════════════════════════════════════════ -->
+<div id="page-5" class="page theme-page" style="--tc:#5a6b84">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-5"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(4)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(6)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#5a6b84;border-color:rgba(90,107,132,0.28);background:rgba(90,107,132,0.06)">Act II — Operating Principles</div>
+      <div class="theme-number-bg">05</div>
+      <h1 class="theme-title">The Third Mind</h1>
+      <div class="theme-claim">"When a human and an AI work together with genuine intention, the output is not the sum of two inputs — it's something neither could have produced independently. That emergent quality is the third mind."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T5: Venn diagram, two circles breathing toward intersection -->
+      <svg viewBox="0 0 220 180" fill="none">
+        <circle cx="82"  cy="90" r="52" stroke="#421d24" stroke-width="1.5" fill="rgba(66,29,36,0.08)"  class="t5-ca"/>
+        <circle cx="138" cy="90" r="52" stroke="#d4c7ff" stroke-width="1.5" fill="rgba(212,199,255,0.1)" class="t5-cb"/>
+        <ellipse cx="110" cy="90" rx="22" ry="42" fill="rgba(212,199,255,0.32)" class="t5-cx"/>
+        <text x="55"  y="88" fill="#421d24" font-size="8.5" font-family="Manrope,sans-serif" opacity="0.75" class="t5-label">Human</text>
+        <text x="148" y="88" fill="#6b5f8a" font-size="8.5" font-family="Manrope,sans-serif" opacity="0.75" class="t5-label">AI</text>
+        <text x="110" y="86" text-anchor="middle" fill="#5a6b84" font-size="8" font-weight="700" font-family="Manrope,sans-serif" class="t5-label">Third</text>
+        <text x="110" y="98" text-anchor="middle" fill="#5a6b84" font-size="8" font-weight="700" font-family="Manrope,sans-serif" class="t5-label">Mind</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">106</div><div class="stat-label">studies confirm human-AI collaboration outperforms either working alone</div></div>
+    <div class="stat-card"><div class="stat-num">3×</div><div class="stat-label">accuracy improvement when humans review and refine AI output vs. accepting it directly</div></div>
+    <div class="stat-card"><div class="stat-num">9.2%</div><div class="stat-label">AI hallucination rate in professional contexts — invisible without human review</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The most dangerous AI isn't the one that can't do anything. It's the one that confidently does the wrong thing.</div>
+      <div class="quote-author">Gary Marcus, cognitive scientist — quoted in The Atlantic, 2025</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🧠</div><div class="reframe-text"><strong>The reframe:</strong> Human review is not a safety net — it's the mechanism through which the third mind forms. When you skip review, you're not saving time. You're opting out of the collaboration entirely.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"1 + 1 doesn't equal 2 when one of them is an AI. Human review isn't the last step. It's where the real thinking begins."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"Has anyone here ever had an AI give you a confident answer that was completely wrong?" Every hand goes up. That's where you start.</div></div>
+    </div>
+    <div class="hooks-row">
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">Human Review: A Skill, Not a Failure of Automation</div>
+        <div class="subtopic-text">Review is not what you do when AI can't finish the job. It's the intentional act of applying judgment, context, and responsibility to AI output. It makes you better — and makes the output trustworthy.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 6
+════════════════════════════════════════════════════════════ -->
+<div id="page-6" class="page theme-page" style="--tc:#6b3f55">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-6"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(5)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(7)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#6b3f55;border-color:rgba(107,63,85,0.28);background:rgba(107,63,85,0.06)">Act II — Operating Principles</div>
+      <div class="theme-number-bg">06</div>
+      <h1 class="theme-title">It's Not About How You Prompt</h1>
+      <div class="theme-claim">"Prompt engineering is the least interesting skill in the AI era. What actually matters is the relationship you build with your tools over time — the context, the history, the intentional patterns of engagement."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T6: Conversation thread building message by message -->
+      <svg viewBox="0 0 200 190" fill="none">
+        <g class="t6-m1">
+          <rect x="60" y="15" width="120" height="28" rx="8" fill="rgba(66,29,36,0.1)" stroke="rgba(66,29,36,0.25)" stroke-width="1"/>
+          <rect x="70" y="22" width="60" height="4" rx="2" fill="rgba(66,29,36,0.25)"/>
+          <rect x="70" y="30" width="40" height="4" rx="2" fill="rgba(66,29,36,0.15)"/>
+        </g>
+        <g class="t6-m2">
+          <rect x="20" y="52" width="120" height="28" rx="8" fill="rgba(212,199,255,0.2)" stroke="#d4c7ff" stroke-width="1"/>
+          <rect x="30" y="59" width="70" height="4" rx="2" fill="rgba(107,95,138,0.3)"/>
+          <rect x="30" y="67" width="50" height="4" rx="2" fill="rgba(107,95,138,0.2)"/>
+        </g>
+        <g class="t6-m3">
+          <rect x="60" y="90" width="120" height="28" rx="8" fill="rgba(66,29,36,0.1)" stroke="rgba(66,29,36,0.25)" stroke-width="1"/>
+          <rect x="70" y="97"  width="80" height="4" rx="2" fill="rgba(66,29,36,0.25)"/>
+          <rect x="70" y="105" width="55" height="4" rx="2" fill="rgba(66,29,36,0.15)"/>
+        </g>
+        <g class="t6-m4">
+          <rect x="20" y="128" width="120" height="28" rx="8" fill="rgba(212,199,255,0.2)" stroke="#d4c7ff" stroke-width="1"/>
+          <rect x="30" y="135" width="85" height="4" rx="2" fill="rgba(107,95,138,0.3)"/>
+          <rect x="30" y="143" width="60" height="4" rx="2" fill="rgba(107,95,138,0.2)"/>
+        </g>
+        <rect x="60" y="166" width="2" height="14" rx="1" fill="#6b3f55" class="t6-cur"/>
+        <text x="72" y="177" fill="#9c868b" font-size="8" font-family="Manrope,sans-serif">relationship, not transaction</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">78%</div><div class="stat-label">of AI power users spend more time reviewing and refining output than writing the initial prompt</div></div>
+    <div class="stat-card"><div class="stat-num">4×</div><div class="stat-label">better output quality when users provide rich context vs. a single-shot instruction</div></div>
+    <div class="stat-card"><div class="stat-num">15 min</div><div class="stat-label">the recommended weekly agent check-in — treat it like a 1:1 with a direct report</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The best AI users I know don't have better prompts. They have better relationships with their tools.</div>
+      <div class="quote-author">Ethan Mollick, Wharton Professor — One Useful Thing, 2025</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🔄</div><div class="reframe-text"><strong>The reframe:</strong> Stop optimizing individual prompts. Start investing in ongoing context, consistent check-ins, and longer-horizon tasks. Your AI doesn't need a perfect question — it needs a good working relationship.</div></div>
+    <div class="hooks-row-3">
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">The Tool Is the Teacher</div>
+        <div class="subtopic-text">Every interaction teaches you something about how to think better. The tool is not just an output machine — it's a mirror for your own reasoning.</div>
+      </div>
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">The Prompt Flip</div>
+        <div class="subtopic-text">Instead of asking AI to answer your questions, ask it to question your answers. Inversion unlocks better thinking than forward prompting.</div>
+      </div>
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">Manage Agents Like a Team</div>
+        <div class="subtopic-text">Schedule 15-minute check-ins. Give agents tasks that take a while. Your overall pattern of engagement shapes output quality far more than any single prompt.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 7
+════════════════════════════════════════════════════════════ -->
+<div id="page-7" class="page theme-page" style="--tc:#7a5c35">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-7"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(6)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(8)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#7a5c35;border-color:rgba(122,92,53,0.28);background:rgba(122,92,53,0.06)">Act II — Operating Principles</div>
+      <div class="theme-number-bg">07</div>
+      <h1 class="theme-title">Context Is King</h1>
+      <div class="theme-claim">"The quality of what AI gives you is determined almost entirely by the quality of what you give it. Every gap in your context is a gap in your output — invisible until it matters most. Prompt engineering is the wrong obsession. Context architecture is the right one."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T7: Document with text lines and tags filling in sequentially -->
+      <svg viewBox="0 0 200 200" fill="none">
+        <rect x="30" y="15" width="140" height="170" rx="8" stroke="#7a5c35" stroke-width="1.5" fill="rgba(122,92,53,0.04)" class="t7-outline"/>
+        <rect x="30" y="15" width="140" height="26" rx="8" fill="rgba(122,92,53,0.08)" class="t7-outline"/>
+        <text x="100" y="32" text-anchor="middle" fill="#7a5c35" font-size="9" font-weight="700" font-family="Manrope,sans-serif" class="t7-outline">AI CONTEXT PROFILE</text>
+        <rect x="45" y="54"  width="110" height="5" rx="2.5" fill="rgba(122,92,53,0.35)" class="t7-l1"/>
+        <rect x="45" y="65"  width="85"  height="5" rx="2.5" fill="rgba(122,92,53,0.2)"  class="t7-l2"/>
+        <rect x="45" y="82"  width="100" height="5" rx="2.5" fill="rgba(122,92,53,0.35)" class="t7-l3"/>
+        <rect x="45" y="93"  width="70"  height="5" rx="2.5" fill="rgba(122,92,53,0.2)"  class="t7-l4"/>
+        <rect x="45" y="110" width="95"  height="5" rx="2.5" fill="rgba(122,92,53,0.35)" class="t7-l5"/>
+        <rect x="45" y="121" width="60"  height="5" rx="2.5" fill="rgba(122,92,53,0.2)"  class="t7-l6"/>
+        <rect x="45"  y="142" width="38" height="16" rx="8" fill="rgba(212,199,255,0.2)" stroke="#d4c7ff" stroke-width="1" class="t7-t1"/>
+        <text x="64"  y="153" text-anchor="middle" fill="#6b5f8a" font-size="7" font-family="Manrope,sans-serif" class="t7-t1">context</text>
+        <rect x="90"  y="142" width="38" height="16" rx="8" fill="rgba(212,199,255,0.2)" stroke="#d4c7ff" stroke-width="1" class="t7-t2"/>
+        <text x="109" y="153" text-anchor="middle" fill="#6b5f8a" font-size="7" font-family="Manrope,sans-serif" class="t7-t2">history</text>
+        <rect x="135" y="142" width="38" height="16" rx="8" fill="rgba(212,199,255,0.2)" stroke="#d4c7ff" stroke-width="1" class="t7-t3"/>
+        <text x="154" y="153" text-anchor="middle" fill="#6b5f8a" font-size="7" font-family="Manrope,sans-serif" class="t7-t3">voice</text>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">4×</div><div class="stat-label">output quality improvement when users provide structured context vs. open-ended prompts</div></div>
+    <div class="stat-card"><div class="stat-num">83%</div><div class="stat-label">of AI rework traces back to context gaps — not prompt syntax errors</div></div>
+    <div class="stat-card"><div class="stat-num">5 min</div><div class="stat-label">context investment that eliminates an average of 40 minutes of revision cycles per deliverable</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The bottleneck to AI productivity isn't the model — it's the context you give it.</div>
+      <div class="quote-author">Andrew Ng, AI researcher and educator</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🏗️</div><div class="reframe-text"><strong>The reframe:</strong> Most people treat context as setup. It's actually architecture. When you give an AI model rich, structured context — your role, your audience, your constraints, your preferences — you're not warming it up. You're configuring a collaborator. <em>Context is not the thing you do before the real work. Context is the real work.</em></div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"Everyone's trying to write better prompts. But the problem usually isn't the prompt — it's that the AI doesn't know who you are, what you're working on, or what 'good' looks like in your world. We're not teaching people to prompt better. We're teaching them to set up better."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"How many of you have gotten a response from AI that felt completely off? Now — when that happened, how many of you tried rewriting the prompt? Here's the thing: the prompt wasn't the problem. The AI didn't know enough about you to help you well."</div></div>
+    </div>
+
+    <div class="hooks-row">
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">Your AI Needs a Resume</div>
+        <div class="subtopic-text">A Context Brief is a short document — 200 to 400 words — that tells your AI who you are, how you work, what you care about, and what good output looks like for you. Think of it as your AI's onboarding doc. It includes your role, your audience, your tone preferences, examples of work you're proud of, and what to avoid. The best ones become team assets — shared, refined, and reused over time.</div>
+      </div>
+      <div class="subtopic-card">
+        <div class="subtopic-label">Subtopic</div>
+        <div class="subtopic-title">AI Shouldn't Wait to Be Asked</div>
+        <div class="subtopic-text">Prompt engineering asks: <em>How do I phrase this request?</em> Context architecture asks: <em>What does this AI need to know before I ever make a request?</em> The distinction is the difference between optimizing at the interaction level and investing at the relationship level. One gets you a better answer today. The other gets you a better collaborator permanently — one that doesn't need to be briefed from scratch every time.</div>
+      </div>
+    </div>
+
+    <!-- ─── Section: Context Windows ─── -->
+    <div class="subtopics-section" style="grid-column:1/-1;margin-top:8px">
+      <div class="subtopics-header">Context Windows: The Technical Picture</div>
+      <div class="subtopics-body">
+        <p>Every AI model can only work with a finite amount of information at one time. That working memory is called the <strong>context window</strong> — the amount of text and data the model can hold in active consideration during a session.</p>
+        <p style="margin-top:10px">Early models had tiny windows — a few thousand words. The AI would frequently "forget" what you said at the start of a long conversation. It was like working with a colleague who could only remember the last five minutes of a meeting. Modern platforms like Claude, GPT-4, and Gemini have expanded those windows dramatically — from tens of thousands to hundreds of thousands of words. Some can now hold entire books or full project histories in a single session.</p>
+        <p style="margin-top:10px">But here's the part that gets missed: <strong>a bigger window doesn't help you if you don't fill it with the right things.</strong> The context window is the canvas. What you load into it determines what the AI can produce. Size creates opportunity. What you put in it creates outcomes.</p>
+        <div class="reframe-card" style="margin-top:16px"><div class="reframe-icon">💡</div><div class="reframe-text"><strong>For non-technical people:</strong> You don't need to understand how context windows work under the hood. You just need to know that your AI has more room than ever to understand your world — and your job is to fill that room intentionally.</div></div>
+      </div>
+    </div>
+
+    <!-- ─── Section: Platform Connections ─── -->
+    <div class="subtopics-section" style="grid-column:1/-1">
+      <div class="subtopics-header">Platform Connections: Your World as Context</div>
+      <div class="subtopics-body">
+        <p>For most people, "context" sounds like something you type into a chat box. But in practice, context is everything your AI can see — not just what you tell it in the moment. Every platform connection, integration, and data source you grant an AI access to is a layer of context.</p>
+        <ul style="margin:12px 0 0 18px;line-height:2">
+          <li><strong>Your calendar</strong> tells the AI what you're focused on this week, who you're meeting with, and what's coming up fast.</li>
+          <li><strong>Your email and messages</strong> show the AI the conversations, commitments, and tone of your actual work.</li>
+          <li><strong>Your CRM</strong> gives it deal context, customer history, and stakeholder relationships.</li>
+          <li><strong>Your documents and files</strong> let it understand your past work, your standards, and your institutional knowledge.</li>
+          <li><strong>Your team's Slack channels</strong> surface what's moving, what's blocked, and what the team actually cares about.</li>
+        </ul>
+        <p style="margin-top:12px">Separately, each of these is a data source. Together, they are a <strong>picture of your world</strong> — and an AI with access to that picture operates at a completely different level than one that only knows what you typed in the last message. The question isn't whether context matters. The question is: <em>how much of your world have you actually made available?</em></p>
+      </div>
+    </div>
+
+
+    <!-- ─── Section: What to Do ─── -->
+    <div class="subtopics-section" style="grid-column:1/-1">
+      <div class="subtopics-header">What to Do With This Information</div>
+      <div class="subtopics-body">
+        <div class="asks-grid" style="margin-top:4px">
+          <div class="ask-card" style="background:var(--cloud)">
+            <div class="ask-number">01</div>
+            <div class="ask-title">Audit what your AI can actually see</div>
+            <div class="ask-body">Open the AI tools you use most. What does this tool actually have access to right now — your calendar, email, CRM, files? If the answer is "just what I type," you're leaving an enormous amount of capability on the table.</div>
+          </div>
+          <div class="ask-card" style="background:var(--cloud)">
+            <div class="ask-number">02</div>
+            <div class="ask-title">Close your top three context gaps</div>
+            <div class="ask-body">From your audit, identify the two or three data sources that would most change how your AI helps you. For most people: CRM data, calendar context, and email or message history. Prioritize connecting those first.</div>
+          </div>
+          <div class="ask-card" style="background:var(--cloud)">
+            <div class="ask-number">03</div>
+            <div class="ask-title">Write your Context Brief</div>
+            <div class="ask-body">Build a short doc — 200 to 400 words — that tells your AI who you are, what you do, who you serve, and what good output looks like. Save it. Paste it at the start of new sessions. Share a version with your team.</div>
+          </div>
+          <div class="ask-card" style="background:var(--cloud)">
+            <div class="ask-number">04</div>
+            <div class="ask-title">Treat context as an investment, not a cost</div>
+            <div class="ask-body">Every minute you spend giving AI better context saves you ten in revision and frustration. The teams winning with AI right now aren't the ones with the best prompts — they're the ones who've made their AI actually understand their world.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 8
+════════════════════════════════════════════════════════════ -->
+<div id="page-8" class="page theme-page" style="--tc:#3a5c42">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-8"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(7)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(9)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#3a5c42;border-color:rgba(58,92,66,0.28);background:rgba(58,92,66,0.06)">Act III — The Forward View</div>
+      <div class="theme-number-bg">08</div>
+      <h1 class="theme-title">Beyond Docs and Decks</h1>
+      <div class="theme-claim">"The document era is ending. Not because documents don't matter — but because documents are becoming the output of something richer, more dynamic, and far more connected to the actual work."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T8: Static doc morphing into flowing data waves -->
+      <svg viewBox="0 0 200 190" fill="none">
+        <rect x="60" y="20" width="80" height="100" rx="6" stroke="rgba(58,92,66,0.35)" stroke-width="1.5" fill="rgba(58,92,66,0.05)" class="t8-doc"/>
+        <rect x="73" y="36" width="54" height="4" rx="2" fill="rgba(58,92,66,0.2)" class="t8-doc"/>
+        <rect x="73" y="47" width="40" height="4" rx="2" fill="rgba(58,92,66,0.15)" class="t8-doc"/>
+        <rect x="73" y="58" width="50" height="4" rx="2" fill="rgba(58,92,66,0.15)" class="t8-doc"/>
+        <rect x="73" y="69" width="35" height="4" rx="2" fill="rgba(58,92,66,0.15)" class="t8-doc"/>
+        <text x="100" y="118" text-anchor="middle" fill="#3a5c42" font-size="8" font-family="Manrope,sans-serif" opacity="0.7" class="t8-doc">→ data layer</text>
+        <path d="M 20 138 Q 50 118 80 138 Q 110 158 140 138 Q 170 118 190 132" stroke="#d4c7ff" stroke-width="1.8" fill="none" class="t8-w1"/>
+        <path d="M 10 154 Q 45 132 80 152 Q 115 172 150 152 Q 175 136 195 147" stroke="#3a5c42" stroke-width="1.4" fill="none" opacity="0.7" class="t8-w2"/>
+        <path d="M 15 170 Q 55 150 90 167 Q 125 184 160 167 Q 182 156 198 162" stroke="rgba(212,199,255,0.6)" stroke-width="1.2" fill="none" class="t8-w3"/>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">68%</div><div class="stat-label">of knowledge workers say they spend more time reformatting and moving data than actually analyzing it</div></div>
+    <div class="stat-card"><div class="stat-num">$2.5T</div><div class="stat-label">estimated annual value lost globally to unstructured, inaccessible organizational knowledge</div></div>
+    <div class="stat-card"><div class="stat-num">10×</div><div class="stat-label">faster insight generation when AI can access structured data vs. reformatted documents</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">The most valuable thing in most organizations isn't the data. It's the structure that makes the data usable.</div>
+      <div class="quote-author">Andrew Ng, AI researcher and educator — DeepLearning.AI, 2025</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">📊</div><div class="reframe-text"><strong>The reframe:</strong> The deck is not the destination — it's the artifact of a thinking process. As AI increasingly handles the artifact, your value moves upstream to the thinking, the structure, and the decisions that shape what gets produced.</div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"Your next presentation won't be built from slides. It'll be generated from a data model your team actually owns."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"What would it mean if every insight your team produced was instantly available to every AI that needed it?" That question unlocks a completely different way of thinking about knowledge work.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 9
+════════════════════════════════════════════════════════════ -->
+<div id="page-9" class="page theme-page" style="--tc:#7a4f62">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(0)"><span class="chevron-left"></span> All Themes</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="progress-indicator" id="prog-9"></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(8)"><span class="chevron-left"></span></button><button class="nav-btn" onclick="navigate(10)"><span class="chevron-right"></span></button></div>
+    </div>
+  </div>
+  <div class="theme-hero">
+    <div class="theme-hero-left">
+      <div class="theme-act-badge" style="color:#7a4f62;border-color:rgba(122,79,98,0.28);background:rgba(122,79,98,0.06)">Series Closer</div>
+      <div class="theme-number-bg">09</div>
+      <h1 class="theme-title">Productive Play is Paramount</h1>
+      <div class="theme-claim">"The teams advancing fastest in AI are not the ones with the biggest budgets or the most technical talent. They are the ones that gave themselves permission to experiment, to be curious, to play — and treated that play as work."</div>
+    </div>
+    <div class="theme-visual">
+      <!-- T9: Three shapes orbiting a center point at different speeds -->
+      <svg viewBox="0 0 200 190" fill="none">
+        <circle cx="100" cy="95" r="52" stroke="rgba(122,79,98,0.1)" stroke-width="0.8" fill="none"/>
+        <circle cx="100" cy="95" r="36" stroke="rgba(122,79,98,0.1)" stroke-width="0.8" fill="none"/>
+        <circle cx="100" cy="95" r="44" stroke="rgba(122,79,98,0.1)" stroke-width="0.8" fill="none"/>
+        <circle cx="100" cy="95" r="7" fill="#7a4f62" opacity="0.45" class="t9-core"/>
+        <g class="t9-oa">
+          <circle cx="0" cy="0" r="9" fill="rgba(212,199,255,0.3)" stroke="#d4c7ff" stroke-width="1.2"/>
+        </g>
+        <g class="t9-ob">
+          <rect x="-7" y="-7" width="14" height="14" rx="3" fill="rgba(122,79,98,0.25)" stroke="#7a4f62" stroke-width="1.2"/>
+        </g>
+        <g class="t9-oc">
+          <polygon points="0,-9 8,5 -8,5" fill="rgba(58,92,66,0.2)" stroke="#3a5c42" stroke-width="1.2"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="theme-body">
+    <div class="stat-card"><div class="stat-num">40%</div><div class="stat-label">more breakthrough ideas generated by teams that dedicate structured time to low-stakes AI experimentation</div></div>
+    <div class="stat-card"><div class="stat-num">72%</div><div class="stat-label">of top AI users in organizations are self-taught — they learned by playing, not by training</div></div>
+    <div class="stat-card"><div class="stat-num">3 hrs</div><div class="stat-label">average weekly time the most AI-fluent professionals spend in unstructured exploration of tools</div></div>
+    <div class="quote-card">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">Play is the highest form of research.</div>
+      <div class="quote-author">Albert Einstein — often attributed; holds regardless of origin</div>
+    </div>
+    <div class="reframe-card"><div class="reframe-icon">🎲</div><div class="reframe-text"><strong>The reframe:</strong> The organizations that build serious AI capability are the ones that made it safe to play. That means protected time, low-stakes environments, and the explicit message that <em>exploration is not a distraction from the work — it is the work.</em></div></div>
+    <div class="hooks-row">
+      <div class="hook-card"><div class="hook-label">LinkedIn Hook</div><div class="hook-text">"The most AI-capable teams I've seen have one thing in common: they gave themselves permission to not know what they were doing. Productive play is a strategy."</div></div>
+      <div class="hook-card"><div class="hook-label">Session Opener</div><div class="hook-text">"What's something you've always wanted to try with AI but didn't have 'permission' to?" Almost everyone has an answer. The session is about giving them that permission — officially.</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 10 — WRAP-UP
+════════════════════════════════════════════════════════════ -->
+<div id="page-10" class="page" style="background:var(--cloud)">
+  <div class="theme-topbar">
+    <button class="back-btn" onclick="navigate(9)"><span class="chevron-left"></span> Theme 09</button>
+    <div class="sh-logo-bar"><span class="sh-logo-text">AI Enablement Series</span></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="nav-btns"><button class="nav-btn" onclick="navigate(0)" title="Home">⌂</button></div>
+    </div>
+  </div>
+  <div class="wrapup-inner">
+    <div class="wrapup-header">
+      <div class="page-eyebrow">Series Wrap-Up</div>
+      <h1 class="page-title">The 10 Things We Covered</h1>
+      <p class="page-sub">Ten themes. Three acts. One direction — toward a more intentional, capable, and human relationship with AI.</p>
+    </div>
+    <div class="act-section">
+      <div class="act-section-title" style="color:var(--heart)">Act I — Identity Reset</div>
+      <div class="theme-row" onclick="navigate(1)"><div class="theme-row-num">01</div><div class="theme-row-content"><div class="theme-row-title">Proficiency is Relatively Impossible</div><div class="theme-row-desc">Stop waiting to feel ready. Direction matters more than expertise.</div></div></div>
+      <div class="theme-row" onclick="navigate(2)"><div class="theme-row-num">02</div><div class="theme-row-content"><div class="theme-row-title">EQ Over IQ</div><div class="theme-row-desc">The skills that once felt soft are now the hardest differentiators.</div></div></div>
+      <div class="theme-row" onclick="navigate(3)"><div class="theme-row-num">03</div><div class="theme-row-content"><div class="theme-row-title">Becoming a Team Lead</div><div class="theme-row-desc">Your next direct report won't have a salary. Managing agents is the new management skill.</div></div></div>
+      <div class="theme-row" onclick="navigate(4)"><div class="theme-row-num">04</div><div class="theme-row-content"><div class="theme-row-title">Architects, Not Engineers</div><div class="theme-row-desc">You don't need to build things. You need to know what to build.</div></div></div>
+    </div>
+    <div class="act-section">
+      <div class="act-section-title" style="color:var(--myst-deep)">Act II — Operating Principles</div>
+      <div class="theme-row" onclick="navigate(5)"><div class="theme-row-num">05</div><div class="theme-row-content"><div class="theme-row-title">The Third Mind</div><div class="theme-row-desc">Human + AI produces something neither could reach independently.</div></div></div>
+      <div class="theme-row" onclick="navigate(6)"><div class="theme-row-num">06</div><div class="theme-row-content"><div class="theme-row-title">It's Not About How You Prompt</div><div class="theme-row-desc">Your overall interactions matter more than any individual prompt.</div></div></div>
+      <div class="theme-row" onclick="navigate(7)"><div class="theme-row-num">07</div><div class="theme-row-content"><div class="theme-row-title">Context Is King</div><div class="theme-row-desc">The more your AI understands about your world — through platform connections, integrations, and a rich context brief — the better it can help you in it.</div></div></div>
+    </div>
+    <div class="act-section">
+      <div class="act-section-title" style="color:#3d6655">Act III — The Forward View</div>
+      <div class="theme-row" onclick="navigate(8)"><div class="theme-row-num">08</div><div class="theme-row-content"><div class="theme-row-title">Beyond Docs and Decks</div><div class="theme-row-desc">The slide deck is becoming an output. The data layer is becoming the input.</div></div></div>
+      <div class="theme-row" onclick="navigate(9)"><div class="theme-row-num">09</div><div class="theme-row-content"><div class="theme-row-title">Productive Play is Paramount</div><div class="theme-row-desc">Permission to play is not a perk. It is a competitive advantage.</div></div></div>
+    </div>
+    <div class="wrapup-close">
+      <p>This series was built on one belief: <strong>the people who thrive in an AI-accelerated world won't be the most technically fluent.</strong> They'll be the most curious, the most intentional, and the most willing to engage. <em>That's you. That's all of us. Let's go.</em></p>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+let current = 0;
+
+function navigate(n) {
+  const from = document.querySelector('.page.active');
+  if (from) from.classList.remove('active');
+  const target = n === 0 ? document.getElementById('landing') : document.getElementById('page-' + n);
+  if (!target) return;
+  target.classList.add('active');
+  target.scrollTop = 0;
+  current = n;
+  if (n >= 1 && n <= 9) buildProgress(n);
+  if (n >= 1 && n <= 9) animateStats(target);
+}
+
+function buildProgress(active) {
+  for (let i = 1; i <= 9; i++) {
+    const el = document.getElementById('prog-' + i);
+    if (!el) continue;
+    el.innerHTML = '';
+    for (let d = 1; d <= 9; d++) {
+      const dot = document.createElement('div');
+      dot.className = 'prog-dot' + (d === active ? ' active' : '');
+      dot.onclick = () => navigate(d);
+      el.appendChild(dot);
+    }
+  }
+}
+
+function animateStats(page) {
+  const cards = page.querySelectorAll('.stat-card');
+  cards.forEach((c, i) => {
+    c.classList.remove('visible');
+    setTimeout(() => c.classList.add('visible'), 80 + i * 120);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' && current >= 1 && current < 9) navigate(current + 1);
+  if (e.key === 'ArrowLeft'  && current > 1) navigate(current - 1);
+  if (e.key === 'Escape') navigate(0);
+});
+</script>
+</body>
+</html>
